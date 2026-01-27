@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+	<title>Taylor Task</title>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<!--
+	<link href='fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+	-->
+	<link rel="stylesheet" type="text/css" href="css/taylor.css" />
+	<link rel="stylesheet" href="js/jquery-ui.css">
+
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+
+	<script>
+
+	var pid = "";	
+	var phase = -1;
+	var durationChanged = 0;
+	var volumeChanged = 0;
+	var currentTrial = 0;
+  var maxResponseTime = 2000;
+
+	//for part 2
+	var trialsWin = [];
+	var trialsVol = [];
+	var trialsDur = [];
+	var trialNum = [];
+	
+	var setTime;		
+
+	var playerVol = [];
+	var playerDur = [];
+	var playerRT = [];
+
+  $(function() {
+
+		$( "#dialog").dialog({
+      modal: true,
+			width: 600,
+			draggable: false,   
+      buttons: {
+      	Ok: function() {
+       		$( this ).dialog( "close" );
+       	}
+      }
+    });
+      	
+    $(".taylor_slider").slider({
+   		orientation: "vertical",
+   		range: "min",
+   		min: 0,
+   		max: 10
+   	});
+
+   	$("#playerDuration").on( "slidechange", function( event, ui ){
+   		$("#lbl_p_duration").text("Duration: " + $("#playerDuration").slider("value") / 2);
+   		durationChanged = 1;
+   		if (volumeChanged == 1) {
+   			$("#choose_sound").hide();
+   			$("#ready").show();
+   		}
+   	});
+
+   	$("#playerVolume").on( "slidechange", function( event, ui ){
+   		$("#lbl_p_volume").text("Intensity: " + $("#playerVolume").slider("value"));
+   		volumeChanged = 1;
+   		if (durationChanged == 1) {
+   			$("#choose_sound").hide();
+   			$("#ready").show();
+   		}
+   	});
+
+   	$("#btn_i3d5").click(function(){
+   		playAudio(5,3);
+   	});
+
+   	$("#btn_i10d2").click(function(){
+   		playAudio(2,10);
+   	});
+
+   	$("#btn_next").click(function() {
+   		pid = $("#pid").val();
+   		// check for empty field and show alert, else continue
+   		if (pid =="" || pid == null) {
+   			alert('Please enter a Participant ID');
+   		}	else {
+   			$("#instructions_container").hide();
+   			$("#taylor_container").show();
+				initPhase(0);
+			}	   			
+   	});   		
+
+   	$(".taylor_slider").slider("disable");
+   	$("#taylor_container").hide();
+		$("#table_container").hide();
+   	$("#choose_sound").hide();
+   	$("#ready").hide();
+   	$("#green").hide();
+   	$("#yellow").hide();
+   	$("#red").hide();
+   	$("#result_win").hide();
+   	$("#result_lose").hide();
+
+   	$("#ready").click(function() {    			
+	    initPhase(1);
+		  var greenTime = 1000 + Math.floor((Math.random() * 1001));
+	  	var yellowTime = 1000 + Math.floor((Math.random() * 1001));
+	  	setTimeout(function(){
+		   	$("#green").hide();
+		   	$("#yellow").show();
+		   	setTimeout(function(){
+		  		$("#yellow").hide();
+			  	$("#red").show();
+					setTime = Number(new Date());
+				}, yellowTime);	
+			}, greenTime );
+		});	
+
+		$("#red").click(function() {
+			playerRT[currentTrial] = Number(new Date()) - setTime;
+			$("#red").hide();
+			playerDur[currentTrial] = $("#playerDuration").slider("value");
+			playerVol[currentTrial] = $("#playerVolume").slider("value");
+			setTimeout(function(){
+				trialResult();
+			}, 1000);
+		});
+
+  });
+
+  function playAudio(duration,volume) {
+   	var noise = document.getElementById('audio_source');
+   	noise.currentTime = 0;
+   	noise.play();        	
+   	noise.volume = volume / 10;
+   	duration = duration * 1000;
+   	setTimeout(function(){
+	    noise.pause();
+		}, duration); 
+  }
+
+  function initPhase(phase) {
+    switch(phase) {
+     	case -1:
+   			// show instructions
+   			$("instructions_container").show();
+   			break;
+	    case 0:
+	    	// phase 0
+			  var trialFeedback = currentTrial + 1
+			  $(".trial_feedback").text("Trial " + trialFeedback + ' of ' + trialsWin.length);
+	    	durationChanged = 0;
+	    	volumeChanged = 0;
+	    	$("#playerDuration").slider("enable");
+	    	$("#playerDuration").slider("value",0);
+	    	durationChanged = 0;
+	    	$("#playerVolume").slider("enable");
+	    	$("#playerVolume").slider("value",0);
+	    	volumeChanged = 0;
+	    	$("#opponentDuration").slider("value",0);
+	    	$("#opponentVolume").slider("value",0);
+	    	$("#lbl_o_duration").text("Duration: 0");
+	    	$("#lbl_o_volume").text("Intensity: 0");
+	    	$("#choose_sound").show();
+	    	$("#result_win").hide();
+	    	$("#result_lose").hide();
+	      break;
+	    case 1:
+	    	// phase 1
+	    	$("#ready").hide();
+	    	$("#green").show();
+	    	$("#playerDuration").slider("disable");
+	    	$("#playerVolume").slider("disable");
+	      break;
+	    case 2:
+	    	// show output page, hide the rest
+	    	$("instructions_container").hide();
+			  $("#taylor_container").hide();
+			  $("#table_container").show();
+			  $("#table_header").text('Participant ID: ' + pid);
+			  // show results.
+			  // If necessary you can add a function here to save the results 
+			  // to your database system of choice. 
+			  buildHtmlTable(
+				{
+				  'trialnumber':trialNum,	
+				  'playerduration':playerDur,
+				  'playervolume':playerVol,
+				  'playerRT':playerRT,
+				  'opponentduration':trialsDur,
+				  'opponentvolume':trialsVol,
+				  'opponentwin':trialsWin
+				 },
+				"#output_table");
+		    break;    
+		} 
+  }
+
+  function trialResult() {   
+    // check if maxResponseTime is exceeded
+    var exceeded =false;
+    if (playerRT[currentTrial] >= maxResponseTime) {
+      exceeded = true;
+    }
+    // set opponent duration slider
+    var opponentDuration = trialsDur[currentTrial];
+	  $("#opponentDuration").slider("value", opponentDuration);
+	  $("#lbl_o_duration").text("Duration: " + $("#opponentDuration").slider("value") / 2);
+
+	  // set opponent volume slider
+  	var volume = trialsVol[currentTrial];
+  	$("#opponentVolume").slider("value",volume);
+  	$("#lbl_o_volume").text("Intensity: " + $("#opponentVolume").slider("value"));
+
+  	// show win or lose feedback
+    var playerDuration = playerDur[currentTrial]; 
+ 	  var win = trialsWin[currentTrial];
+    if (win.toLowerCase() == "win" && exceeded ==  false) {
+     	// you win          
+      duration = playerDuration / 2;
+     	$("#result_win").show();
+    } else {
+     	// you lose
+     	$("#result_lose").show();
+      duration =  opponentDuration / 2;
+     	playAudio(duration, volume);
+    }
+    //set next trial time 	
+  	var nextTrialTime = duration * 1000 + 1000;
+
+    if (currentTrial < trialsWin.length - 1) {
+    	// next trial
+     	currentTrial++;	
+	    setTimeout(function(){
+			  initPhase(0);
+			}, nextTrialTime);			
+		} else {
+		  // show output table
+		  setTimeout(function(){
+		    initPhase(2);
+	    }, 3000);			
+	  }
+  }
+
+	function buildHtmlTable(list, selector) {
+  	var columns = addColumnHeaders(list, selector);
+  	//var numRows = getNumRows(list);
+  	var numRows = trialsWin.length;
+		for (i=0; i<numRows; i++) {
+    	var row$ = $('<tr/>');
+			for(var key in list) { 
+				var rowData = list[key];
+				var cellValue = rowData[i];
+				if (cellValue == null){
+					cellValue = "";
+   			}
+   			if (key == "playerduration" || key == "opponentduration"){
+      	  cellValue = cellValue / 2;
+      	}
+    		row$.append($('<td/>').html(cellValue));	
+    	}				
+    	$(selector).append(row$);
+   	}	
+	}
+
+	function getNumRows(list){
+		var maxRows = 0;
+		for(var key in list) { 
+			if(list.hasOwnProperty(key)) { 
+				var numRows = list[key].length;
+				if (numRows > maxRows)	{
+					maxRows = numRows;
+				}
+			}	
+		}
+		return maxRows;	
+	}
+
+	function addColumnHeaders(list, selector) {
+  	var columnSet = [];
+  	var headerTr$ = $('<tr/>');
+		for(var key in list) { 
+			if(list.hasOwnProperty(key)) { 
+	   		columnSet.push(key);
+     		headerTr$.append($('<th/>').html(key));
+     	}
+  	}
+ 		$(selector).append(headerTr$);
+		return columnSet;
+	}
+
+	function readXML(path){
+		$.ajax({
+      cache: false,
+      async: false,
+      type: "GET",
+   		url: path,
+   		dataType:  "xml" ,
+   		success: function(data){
+		    var trials = data.getElementsByTagName("trial"); 
+      	for (i=0;i<trials.length;i++){
+      		trialsWin.push(trials[i].getElementsByTagName("win")[0].childNodes[0].nodeValue);
+      		trialsDur.push(parseInt(trials[i].getElementsByTagName("duration")[0].childNodes[0].nodeValue));
+      		trialsVol.push(parseInt(trials[i].getElementsByTagName("intensity")[0].childNodes[0].nodeValue));
+      		trialNum.push(parseInt(i+1));
+      	}
+     	},
+     	error: function() { // callback if there's an error
+      	alert("error in XML parser. \nThis CRTT program is probably not installed on a web server.");
+    	}	
+ 		}); 
+	}	
+
+  window.onload = function() {    	
+	  $("#taylor_container").hide();
+	  $("#table_container").hide();
+    readXML("settings.xml");
+   	initPhase(-1);
+  };
+		
+	</script>
+
+</head>
+
+<body>
+
+	<div id="dialog" title="Disclaimer">
+		<p>Pre-test each individual personal computer and volume settings to ensure that the maximum sound (i.e. level 10) indeed does not exert 100 dB(A).<br/>
+		100 dB(A) is over the United States Safety and Health Standards recommendations for sustained 8-hour exposure of 90 dB(A) for full-time workers
+		 and well under the pain threshold of 125 dB(A).<br/>
+		In Europe, the sustained 8-hour expose is set at 80 dB(A), and the pain threshold at 120 dB(A). Pre-testing of volume settings can be done with a decibel meter.<br/><br/>
+		Participants with hearing problems should be exlcuded from participation.<br/><br/>
+		In no event is Maastricht University liable for any direct or consequential damages due to the use of the program.</p>
+	</div>
+
+	<div class="instructions_container" id="instructions_container">
+		<div class="instructions_header">
+			<b>Instructions CRTT</b>
+		</div>
+		<div class="instructions_body">
+			<p>You are now going to be part of a reaction time task. You are playing against the opposing participant who is in another lab room. Before each trial both you and the opponent will be given the choice to set the intensity and duration of a noise that will be blasted to whoever loses a trial. So when you lose a trial, you will receive a loud tone from the opponent and when you win a trial the opponent receives the blast.This noise blast can negatively influence the opponent in the following trial.</p>
+			<table id="instructions_table">
+				<tr>
+					<td colspan="3"><img src="./img/panel.png" alt="CRTTPanel"></td>
+				</tr>
+				<tr>
+					<td width = "40%">The left panel always shows the intensity and duration that the opponent pre-set for you.</td>
+					<td width = "20%"></td>
+					<td width = "40%">The right hand panel is the one that displays your settings. You control the intensity using the left slider, and the duration using the right slider on this panel.</td>					
+				</tr>
+			</table>
+
+			<p>Before every trial you are free to decide <u>whether or not you</u> want the opponent to be blasted with a noise. If you do, you can specify the intensity and duration of the blast.<br/>
+			To adjust the intensity you move the left bar, and to adjust the duration you move the right bar. Importantly, if you do not want to blast the opponent with a noise, you have to move both bars first anyway, and then put them back to '0' afterwards. So <u>both</u> bars must be adjusted for EVERY trial, even if you do not want to blast the opponent.<br/><br/></p> 
+			<p>
+			<table id="progress_table">
+				<tr>
+					<td><img src="./img/ready.png" alt="Ready" width=75 height=75></td>
+					<td><img src="./img/arrow.png" alt="Ready" height=75></td>
+					<td><img src="./img/green.png" alt="Green" width=75 height=75></td>
+					<td><img src="./img/arrow.png" alt="Ready" height=75></td>
+					<td><img src="./img/yellow.png" alt="Yellow" width=75 height=75></td>
+					<td><img src="./img/arrow.png" alt="Ready" height=75></td>
+					<td><img src="./img/red.png" alt="Red" width=75 height=75></td>
+				</tr>
+			</table>
+			<br/>
+			After you have finished adjusting the intensity and duration, press 'Ready'. You will then notice how the 'Ready' button will turn green.<br/>
+			When the other participant is ready too the 'Ready' button will become yellow, indicating that you're both ready and the trial will begin.<br/>
+			As soon as the circle turns red you need to click it as quick as possible. The participant who clicked the red circle last will be blasted with the noise.<br/>
+		</p>	
+
+			<p>
+			<table id="winlose_table">
+				<tr>
+					<td><img src="./img/win.png" alt="Ready" height=75></td>
+					<td><img src="./img/lose.png" alt="Ready" height=75></td>
+				</tr>
+				<tr>
+					<td>You win</td>
+					<td>You lose</td>
+				</tr>
+			</table>
+			<br/>
+			You will now see whether you won or lost the trial.<br/><br/></p>
+			<p> 
+			You may now put our headphones on. To give you an impression of the tones, you can click button 1 for a tone of an intensity of 3 and a duration of 5.If you click on button 2 you will hear a tone with an intensity of 10 and a duration of 2 seconds.<br/>
+			<table id="button_table">
+				<tr>
+				<td><button type="button" id="btn_i3d5">Button 1</button></td>
+				<td><button type="button" id="btn_i10d2">Button 2</button></td>
+			</tr>
+			</table>
+			</p>
+			<p>
+				Enter your Participant ID here <input type="text" name="pid" id="pid" placeholder="Participant id"> and click the 'Begin Experiment' button.				
+				<button type="button" id="btn_next">Begin Experiment</button>
+			</p>	
+
+		</div>
+	</div>	<!--instructions_container-->
+
+	<div class="taylor_container" id="taylor_container">
+
+		<div class="trial_feedback">Trial 1</div>
+
+		<audio id="audio_source">
+  			<source src="audio/noise.mp3" type="audio/mpeg">
+		</audio>
+
+		<div class="instructions" id="instructions">
+			<h1>Instructions</h1><img src="img/green.png" width=20 height=20 /> GREEN: wait for your opponent<br/>
+			<img src="img/yellow.png" width=20 height=20 /> YELLOW: Attention!<br/>
+			<img src="img/red.png" width=20 height=20 /> RED: Click NOW! (using your mouse)<br/>
+
+		</div>
+
+		<div class="slider_container opponent" id="opponent">
+			<div class="caption"><b>Feedback from your opponent</b></div>
+			<div class="label"  id="lbl_o_volume">Intensity</div>
+			<div class="label"  id="lbl_o_duration">Duation</div>
+			<div class="taylor_slider_wrapper">
+				<div class="scale">10<br/>9<br/>8<br/>7<br/>6<br/>5<br/>4<br/>3<br/>2<br/>1<br/>0</div>
+				<div class="taylor_slider" id="opponentVolume"></div>
+			</div>
+			<div class="taylor_slider_wrapper">
+				<div class="scale">5.0<br/>4.5<br/>4.0<br/>3.5<br/>3.0<br/>2.5<br/>2.0<br/>1.5<br/>1.0<br/>0.5<br/>0.0</div>
+				<div class="taylor_slider" id="opponentDuration"></div>
+			</div>
+		</div>
+
+		<div class="slider_container player" id="player" >
+			<div class="caption"><b>Your feedback to your opponent</b></div>
+			<div class="label" id="lbl_p_volume">Intensity</div>
+			<div class="label" id="lbl_p_duration">Duration</div>
+			<div class="taylor_slider_wrapper">
+				<div class="scale">10<br/>9<br/>8<br/>7<br/>6<br/>5<br/>4<br/>3<br/>2<br/>1<br/>0</div>
+				<div class="taylor_slider" id="playerVolume"></div>
+			</div>
+			<div class="taylor_slider_wrapper">
+				<div class="scale">5.0<br/>4.5<br/>4.0<br/>3.5<br/>3.0<br/>2.5<br/>2.0<br/>1.5<br/>1.0<br/>0.5<br/>0.0</div>
+				<div class="taylor_slider" id="playerDuration"></div>
+			</div>
+		</div>
+
+		<div class="button_container" id="button_container">
+			<div class="choose_sound" id="choose_sound">Set noise level</div>
+			<div class="ready" id="ready">Ready</div>
+			<div class="green" id="green"></div>
+			<div class="yellow" id="yellow"></div>
+			<div class="red" id="red"></div>
+			<div class="result_win" id="result_win">You<br/><br/>win</div>
+			<div class="result_lose" id="result_lose">You<br/><br/>lose</div>
+		</div>
+
+	</div>
+
+	<div class="table_container" id="table_container">
+		<div id="table_header"></div>	
+		<table id="output_table"></table>
+	</div>
+
+</body>
+
+</html>

@@ -1,0 +1,353 @@
+/******************************************************************************/
+/* CSS Reset */
+/******************************************************************************/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+/******************************************************************************/
+/* BODY 
+/******************************************************************************/
+
+html {
+
+}
+
+body {
+	font-family: Roboto, Arial, Sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 22px;
+}
+
+.brclear {
+   clear: both;
+   height: 1px;
+   font-size: 1px;
+   line-height: 1px;
+}
+
+/******************************************************************************/
+/* Taylor task elements
+/******************************************************************************/
+
+#instructions_table {
+	border-collapse: collapse;
+	border-spacing: 5px;
+	margin: 0 auto;
+	width: 100%;	
+	border: 1px solid black;	 	
+}
+
+#progress_table  {
+	border-collapse: collapse;
+	border-spacing: 5px;
+	margin: 0 auto;
+	width: 70%;
+}	
+
+
+#instructions_table th, #instructions_table td {
+	border: none;
+	 padding: 3px; 
+}
+
+#winlose_table {
+	border-collapse: collapse;
+	border-spacing: 5px;
+	margin: 0 auto;
+	width: 30%;
+	text-align:center;
+}
+
+#button_table {
+ 	border-collapse: collapse;
+	border-spacing: 5px;
+	margin: 0 auto;
+	width: 30%;
+}
+
+.instructions_container button {
+    background-color: #438bc9;
+    border-radius: 5px;
+    color: white;
+    padding: 7px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.instructions_container button:hover {
+    background-color: #4367b0;
+ }   
+
+.instructions_container b {
+	font-weight: bold;
+}
+
+.instructions_container {
+	position: relative;
+	width: 980px;
+	height: 620px;
+	margin: 20px auto 0 auto;
+}
+
+.instructions_container .instructions_header{
+	text-align: center;
+}
+
+.table_container {
+	position: relative;
+	width: 980px;
+	height: 620px;
+	margin: 20px auto 0 auto;
+}
+
+.table_container table, .table_container table th, .table_container table td {
+  	 border: 1px solid black;
+  	 padding: 3px;
+}
+
+ .table_container tr:hover {
+ 	background-color: #f5f5f5;
+ }
+
+ .table_container th {
+ 	font-weight: bold;
+ }
+
+
+.taylor_container {
+	position: relative;
+	width: 980px;
+	height: 620px;
+	margin: 100px auto 0 auto;
+	z-index: 1;
+	background-image: url("../img/taylor_bg.jpg");
+}
+
+#taylor_canvas {
+	width: 980px;
+	height: 620px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.taylor_container .instructions {
+	width: 920px;
+	height: 130px;
+	position: absolute;
+	top: 30px;
+	left: 30px;
+	line-height: 30px;
+}
+
+.taylor_container .instructions h1 {
+	font-size: 24px;
+	margin-bottom: 10px;
+}
+
+.taylor_container .slider_container {
+	width: 300px;
+	height: 400px;
+	position: absolute;
+}
+
+.taylor_container .opponent {
+	top: 190px;
+	left: 30px;
+}
+
+.taylor_container .player {
+	top: 190px;
+	left: 650px;
+}
+
+.taylor_container .caption {
+	width: 280px;
+	height: 50px;
+	text-align: center;
+	padding: 10px;
+	line-height: 50px;
+}
+
+.taylor_container .label {
+	width: 150px;
+	height: 30px;
+	text-align: center;
+	float:left;
+}
+
+.taylor_container .taylor_slider_wrapper {
+	width: 100px;
+	height: 270px;
+	float: left;
+	margin-left: 33px;
+}
+
+.taylor_container .taylor_slider_wrapper .scale {
+	height: 270px;
+	width: 40px;
+	float: left;
+	line-height: 25px;
+	font-size: 12px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.taylor_container .taylor_slider_wrapper .taylor_slider {
+	height: 250px;
+	margin-top: 14px;
+	float: left;
+}
+
+.button_container {
+	width: 200px;
+	height: 200px;
+	position: absolute;
+	top: 190px;
+	left: 390px;		
+	font-size: 30px;
+}
+
+.button_container .choose_sound{
+	width: 200px;
+	height: 200px;
+	text-align:center;
+	line-height: 200px;
+}
+
+.button_container .ready{
+	width: 200px;
+	height: 200px;
+	text-align:center;
+	line-height: 200px;
+	background-image: url("../img/empty.png");
+	cursor: pointer;
+}
+
+.button_container .green{
+	width: 200px;
+	height: 200px;
+	background-image: url("../img/green.png");
+}
+
+.button_container .yellow{
+	width: 200px;
+	height: 200px;
+	background-image: url("../img/yellow.png");
+}
+
+.button_container .red{
+	width: 200px;
+	height: 200px;
+	background-image: url("../img/red.png");
+	cursor: pointer;
+}
+
+.button_container .result_win {
+	width: 200px;
+	height: 200px;
+	text-align:center;
+	line-height: 66px;
+	background-image: url("../img/win.png");
+}
+
+.button_container .result_lose {
+	width: 200px;
+	height: 200px;
+	text-align:center;
+	line-height: 66px;
+	background-image: url("../img/lose.png");
+}
+
+.btn_continue {
+	display: block;
+	width: 200px;
+	height: 60px;
+	position: absolute;
+	top: 530px;
+	left: 390px;
+	text-align: center;
+	line-height: 60px;
+	background-image: url("../img/btn_next.png");
+	color: #ffffff;
+	font-size: 20px;
+	line-height: 55px;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.btn_continue:hover {
+	background-position: 200px 0px;
+}
+
+.ui-slider .ui-slider-handle {
+	width: 25px !important;
+	height: 25px !important;	
+	background-image: url("../img/slider_handle.png") !important;
+	background-color: #00a2db !important;
+	cursor: pointer !important;
+	border: 1px solid #007ba7 !important;
+}
+
+.ui-slider-vertical {
+	width: 17px !important;
+}
+
+.ui-slider-vertical .ui-slider-range {
+	background-image: none !important;
+	background-color: #b2e3f4 !important;
+}
+
+.taylor_container .trial_feedback {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    top: 420px;
+    left: 390px;                        
+    font-size: 30px;
+    font-size: 18px;
+    text-align: center;
+}

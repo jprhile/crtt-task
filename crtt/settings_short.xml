@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<task>
+	<name>Taylor</name>
+	
+	<trials>
+
+		<trial id = "1">	
+			<win>win</win>
+			<intensity>10</intensity>
+			<duration>1</duration>
+		</trial>
+
+		<trial id = "2">	
+			<win>lose</win>
+			<intensity>3</intensity>
+			<duration>5</duration>
+		</trial>
+
+		<trial id = "3">	
+			<win>win</win>
+			<intensity>4</intensity>
+			<duration>9</duration>
+		</trial>
+
+
+
+	</trials>	
+</task>
+
+

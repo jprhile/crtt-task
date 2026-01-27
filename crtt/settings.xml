@@ -1,29 +1,196 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+<win> = win: participant wins, <win> = lose: participant loses
+<intensity> intensity of the opponent's noise level from 0 - 10. 0 is silent, 10 = maximum noise level
+<duration> duration of the opponent's noise level , from 0 - 10, in half seconds (a setting of 5 means a duration 2.5 seconds).
+-->
 
 <task>
 	<name>Taylor</name>
 	
+	<language>nl</language>
+
 	<trials>
 
 		<trial id = "1">	
 			<win>win</win>
-			<intensity>10</intensity>
-			<duration>1</duration>
+			<intensity>0</intensity>
+			<duration>0</duration>
 		</trial>
 
 		<trial id = "2">	
-			<win>lose</win>
-			<intensity>3</intensity>
-			<duration>5</duration>
+			<win>win</win>
+			<intensity>0</intensity>
+			<duration>0</duration>
 		</trial>
 
 		<trial id = "3">	
 			<win>win</win>
-			<intensity>4</intensity>
+			<intensity>0</intensity>
+			<duration>0</duration>
+		</trial>
+
+		<trial id = "4">	
+			<win>lose</win>
+			<intensity>0</intensity>
+			<duration>0</duration>
+		</trial>
+
+		<trial id = "5">	
+			<win>lose</win>
+			<intensity>0</intensity>
+			<duration>0</duration>
+		</trial>
+
+		<trial id = "6">	
+			<win>win</win>
+			<intensity>0</intensity>
+			<duration>0</duration>
+		</trial>										
+
+		<trial id = "7">	
+			<win>lose</win>
+			<intensity>6</intensity>
+			<duration>7</duration>
+		</trial>
+
+		<trial id = "8">	
+			<win>win</win>
+			<intensity>1</intensity>
+			<duration>1</duration>
+		</trial>
+
+		<trial id ="9">	
+			<win>lose</win>
+			<intensity>6</intensity>
+			<duration>5</duration>
+		</trial>
+
+		<trial id = "10">	
+			<win>lose</win>
+			<intensity>3</intensity>
+			<duration>7</duration>
+		</trial>
+
+		<trial id = "11">	
+			<win>lose</win>
+			<intensity>5</intensity>
+			<duration>2</duration>
+		</trial>
+
+		<trial id = "12">	
+			<win>win</win>
+			<intensity>5</intensity>
 			<duration>9</duration>
 		</trial>
 
+		<trial id = "13">	
+			<win>lose</win>
+			<intensity>2</intensity>
+			<duration>6</duration>
+		</trial>
 
+		<trial id = "14">	
+			<win>win</win>
+			<intensity>1</intensity>
+			<duration>3</duration>
+		</trial>
+
+		<trial id = "15">	
+			<win>win</win>
+			<intensity>3</intensity>
+			<duration>3</duration>
+		</trial>
+
+		<trial id = "16">	
+			<win>lose</win>
+			<intensity>6</intensity>
+			<duration>5</duration>
+		</trial>
+
+		<trial id = "17">	
+			<win>win</win>
+			<intensity>10</intensity>
+			<duration>2</duration>
+		</trial>
+
+		<trial id = "18">	
+			<win>win</win>
+			<intensity>4</intensity>
+			<duration>6</duration>
+		</trial>
+
+		<trial id = "19">	
+			<win>lose</win>
+			<intensity>7</intensity>
+			<duration>9</duration>
+		</trial>
+
+		<trial id = "20">	
+			<win>lose</win>
+			<intensity>3</intensity>
+			<duration>10</duration>
+		</trial>
+
+		<trial id ="21">	
+			<win>win</win>
+			<intensity>6</intensity>
+			<duration>5</duration>
+		</trial>
+
+		<trial id = "22">	
+			<win>lose</win>
+			<intensity>2</intensity>
+			<duration>10</duration>
+		</trial>
+
+		<trial id = "23">	
+			<win>lose</win>
+			<intensity>10</intensity>
+			<duration>6</duration>
+		</trial>
+
+		<trial id = "24">	
+			<win>win</win>
+			<intensity>4</intensity>
+			<duration>10</duration>
+		</trial>
+
+		<trial id = "25">	
+			<win>lose</win>
+			<intensity>9</intensity>
+			<duration>10</duration>
+		</trial>
+
+		<trial id = "26">	
+			<win>win</win>
+			<intensity>6</intensity>
+			<duration>4</duration>
+		</trial>
+
+		<trial id = "27">	
+			<win>lose</win>
+			<intensity>2</intensity>
+			<duration>3</duration>
+		</trial>
+
+		<trial id = "28">	
+			<win>lose</win>
+			<intensity>9</intensity>
+			<duration>7</duration>
+		</trial>
+
+		<trial id = "29">	
+			<win>win</win>
+			<intensity>10</intensity>
+			<duration>3</duration>
+		</trial>		
+
+		<trial id = "30">	
+			<win>lose</win>
+			<intensity>2</intensity>
+			<duration>6</duration>
+		</trial>
 
 	</trials>	
 </task>

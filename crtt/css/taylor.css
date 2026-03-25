@@ -1,6 +1,27 @@
 /******************************************************************************/
 /* CSS Reset */
 /******************************************************************************/
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#taylor_container,
+#instructions_container,
+#table_container {
+  transform-origin: top left;
+  width: 900px;
+  height: 620px;
+}
+
+@media (max-width: 900px) {
+  #taylor_container,
+  #instructions_container,
+  #table_container {
+    transform: scale(calc(100vw / 900));
+  }
+}
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,

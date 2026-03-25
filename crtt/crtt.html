@@ -143,7 +143,24 @@
 	    noise.pause();
 		}, duration); 
   }
+function sendResultsToQualtrics() {
+    const results = {
+        trialnumber: trialNum,
+        playerduration: playerDur.map(v => v / 2),
+        playervolume: playerVol,
+        playerRT: playerRT,
+        opponentduration: trialsDur.map(v => v / 2),
+        opponentvolume: trialsVol,
+        opponentwin: trialsWin,
+        participant_id: pid
+    };
 
+    window.parent.postMessage({
+        type: "CRTT_RESULTS",
+        payload: results
+    }, "*");
+}
+		
   function initPhase(phase) {
     switch(phase) {
      	case -1:
@@ -197,6 +214,7 @@
 				  'opponentwin':trialsWin
 				 },
 				"#output_table");
+			sendResultsToQualtrics();
 		    break;    
 		} 
   }
